@@ -1,0 +1,31 @@
+Value Filldown Required NAME (\S+)
+Value Filldown Required OBJ-TYPE (network|service)
+Value Filldown GROUP (group)
+Value Filldown DESC (\S+)
+Value TYPE (range|host|fqdn|subnet|object|icmp|tcp|udp|tcp\-udp)
+Value ADD-RANGE-START (\d+\.\d+\.\d+\.\d+)
+Value ADD-RANGE-END (\d+\.\d+\.\d+\.\d+)
+Value PORT-SRC-RANGE-START (\S+)
+Value PORT-SRC-RANGE-END (\S+)
+Value PORT-DST-RANGE-START (\S+)
+Value PORT-DST-RANGE-END (\S+)
+Value PORT-SRC (\S+)
+Value PORT-DST (\S+)
+Value PORT-RANGE-START (\S+)
+Value PORT-RANGE-END (\S+)
+Value PORT (\S+)
+Value PORT-TYPE (eq|gt|lt|range)
+Value IP1 (\d+\.\d+\.\d+\.\d+)
+Value IP2 (\d+\.\d+\.\d+\.\d+)
+Value NESTED-GROUP (?:(?:group\-object\s+)(\S+))
+Value FQDN (\S+)
+
+Start
+  ^\S+.* -> Continue.Clearall
+  ^object\s+${OBJ-TYPE}\s+${NAME}
+  ^object\-${GROUP}\s+{OBG-TYPE}\s+${NAME}
+  ^\s+description\s+${DESC}
+  ^\s+network\-object\s+(${TYPE}\s+){0,1}(${IP1}\s+{IP2}\s+$$|${IP1}\s*$$|v4\s+${FQDN})
+  ^\s+${NESTED-GROUP}\s*
+  ^\s+port\-object\s+${PORT-TYPE}\s+(${PORT}\s*$$|${PORT-RANGE-START}\s+${PORT-RANGE-END}\s*$$)
+
