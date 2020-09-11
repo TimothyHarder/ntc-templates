@@ -1,43 +1,44 @@
-Value Filldown Required NAME (\S+)
-Value Filldown Required OBJ-TYPE (network|service|icmp\-type|protocol)
+Value Filldown,Required NAME (\S+)
+Value Filldown,Required OBJ_TYPE (network|service|icmp\-type|protocol)
 Value Filldown GROUP (group)
 Value Filldown DESC (\S+)
 Value TYPE (range|host|fqdn|subnet|object|icmp|tcp|udp|tcp\-udp)
-Value ADD-RANGE-START (\d+\.\d+\.\d+\.\d+)
-Value ADD-RANGE-END (\d+\.\d+\.\d+\.\d+)
-Value PORT-SRC-RANGE-START (\S+)
-Value PORT-SRC-RANGE-END (\S+)
-Value PORT-DST-RANGE-START (\S+)
-Value PORT-DST-RANGE-END (\S+)
-Value PORT-SRC (\S+)
-Value PORT-DST (\S+)
-Value PORT-RANGE-START (\S+)
-Value PORT-RANGE-END (\S+)
+Value PORT_SRC_RANGE_START (\S+)
+Value PORT_SRC_RANGE_END (\S+)
+Value PORT_DST_RANGE_START (\S+)
+Value PORT_DST_RANGE_END (\S+)
+Value PORT_SRC (\S+)
+Value PORT_DST (\S+)
+Value PORT_RANGE_START (\S+)
+Value PORT_RANGE_END (\S+)
 Value PORT (\S+)
-Value PORT-OPERATOR (eq|gt|lt|range|neq)
+Value PORT_OPERATOR (eq|gt|lt|range|neq)
+Value PORT_OPERATOR_SRC (eq|gt|lt|range|neq)
+Value PORT_OPERATOR_DEST (eq|gt|lt|range|neq)
 Value IP1 (\d+\.\d+\.\d+\.\d+)
 Value IP2 (\d+\.\d+\.\d+\.\d+)
-Value NESTED-GROUP (\S+)
-Value NESTED-OBJECT (\S+)
-Value Filldown OBJECT-SERVICE-TYPE (tcp\s*$$|udp\s*$$|tcp\-udp\s*$$|icmp\s*$$)
-Value SERVICE-TYPE (tcp\s*$$|udp\s*$$|tcp\-udp\s*$$|icmp\s*$$)
-Value ICMP-TYPE (echo\-reply|unreachable|source\-quench|redirect|alternate\-address|echo|router\-advertisement|router\-solicitation|time\-exceeded|parameter\-problem|timestamp\-reply|information\-request|information\-reply|mask\-request|mask\-reply|conversion\-error|mobile\-redirect)
+Value NESTED_GROUP (\S+)
+Value NESTED_OBJECT (\S+)
+Value Filldown OBJECT_SERVICE_TYPE (tcp\s*$|udp\s*$|tcp\-udp\s*$|icmp\s*$|icmp6\s*$|esp\s*$)
+Value SERVICE_TYPE (tcp|udp|tcp\-udp|icmp|icmp6|esp)
+Value ICMP_TYPE (echo\-reply|unreachable|source\-quench|redirect|alternate\-address|echo|router\-advertisement|router\-solicitation|time\-exceeded|parameter\-problem|timestamp\-reply|information\-request|information\-reply|mask\-request|mask\-reply|conversion\-error|mobile\-redirect|traceroute)
 Value FQDN (\S+)
-Value PROTOCOL (\s+[0-5]{1,2}\s*$|\s+[0-2][0-5]{1,2}\s*$|\S+\s*$$)
-Value ICMP-CODE (\s+[0-5]{1,2}\s*$|\s+[0-2][0-5]{1,2}\s*$)
+Value PROTOCOL (\s+[0-5]{1,2}\s*$|\s+[0-2][0-5]{1,2}\s*$|\S+\s*$)
+Value ICMP_CODE (\s+[0-5]{1,2}\s*$|\s+[0-2][0-5]{1,2}\s*$)
 
 Start
   ^\S+.* -> Continue.Clearall
-  ^object\s+${OBJ-TYPE}\s+${NAME}\s*$$
-  ^object\-${GROUP}\s+{OBG-TYPE}\s+${NAME}(\s+${OBJECT-SERVICE-TYPE}){0,1}
-  ^\s+description\s+${DESC}
-  ^\s+network\-object\s+(${TYPE}\s+){0,1}(${IP1}\s+{IP2}\s*$$|${IP1}\s*$$|v4\s+${FQDN})
-  ^\s+network\-object\s+object(${NESTED-OBJECT}\s*$$)
-  ^\s+group\-object\s+${NESTED-GROUP}\s*$$
-  ^\s+port\-object\s+${PORT-OPERATOR}\s+(${PORT}\s*$$|${PORT-RANGE-START}\s+${PORT-RANGE-END}\s*$$)
-  ^\s+service-object\s+object(${NESTED-OBJECT}\s*$$)
-  ^\s+service\s+${SERVICE-TYPE}\s+(${ICMP-TYPE}(\s+${ICMP-CODE}){0,1}\s*){0,1}(source\s+${PORT-OPERATOR}\s+((${PORT-SRC-RANGE-START}\s+${PORT-SRC-RANGE-END})|${PORT-SRC})){0,1}(destination\s+${PORT-OPERATOR}\s+((${PORT-DST-RANGE-START}\s+${PORT-DST-RANGE-END})|${PORT-DST})){0,1}\s*$$
-  ^\s+service\-object\s+${SERVICE-TYPE}\s+(${ICMP-TYPE}(\s+${ICMP-CODE}){0,1}\s*){0,1}(source\s+${PORT-OPERATOR}\s+((${PORT-SRC-RANGE-START}\s+${PORT-SRC-RANGE-END})|${PORT-SRC})){0,1}(destination\s+${PORT-OPERATOR}\s+((${PORT-DST-RANGE-START}\s+${PORT-DST-RANGE-END})|${PORT-DST})){0,1}\s*$$
-  ^\s+service\-object\s+object\s+${NESTED-OBJECT}\s*$$
-  ^\s+protocol-object\s+${PROTOCOL}\s*$$
-
+  ^object\s+${OBJ_TYPE}\s+${NAME}\s*$$ -> Next.NoRecord
+  ^object\-${GROUP}\s+${OBJ_TYPE}\s+${NAME}\s*(${OBJECT_SERVICE_TYPE}){0,1}\s*$$ -> Next.NoRecord
+  ^\s+description\s+${DESC} -> Next.NoRecord
+  ^\s+network\-object\s+(${TYPE}\s+){0,1}(${IP1}\s*(${IP2}){0,1}\s*$$|v4\s+${FQDN}\s*$$|${NESTED_OBJECT}\s*$$) -> Next.Record
+  ^\s+(${TYPE}\s+){0,1}(${IP1}\s*(${IP2}){0,1}\s*$$|v4\s+${FQDN})\s*$$ -> Next.Record
+  ^\s+group\-object\s+${NESTED_GROUP}\s*$$ -> Next.Record
+  ^\s+port\-object\s+${PORT_OPERATOR}\s+(${PORT}\s*$$|${PORT_RANGE_START}\s+${PORT_RANGE_END}\s*$$) -> Next.Record
+  ^\s+service-object\s+object(${NESTED_OBJECT}\s*$$) -> Next.Record
+  ^\s+service\s+${SERVICE_TYPE}\s+(${ICMP_TYPE}(\s+${ICMP_CODE}){0,1}\s*){0,1}(source\s+${PORT_OPERATOR_SRC}\s+((${PORT_SRC_RANGE_START}\s+${PORT_SRC_RANGE_END})|${PORT_SRC})){0,1}(destination\s+${PORT_OPERATOR_DEST}\s+((${PORT_DST_RANGE_START}\s+${PORT_DST_RANGE_END})|${PORT_DST})){0,1}\s*$$ -> Next.Record
+  ^\s+service\-object\s+${SERVICE_TYPE}\s*(${ICMP_TYPE}(\s+${ICMP_CODE}){0,1}\s*){0,1}(source\s+${PORT_OPERATOR_SRC}\s+((${PORT_SRC_RANGE_START}\s+${PORT_SRC_RANGE_END})|${PORT_SRC})){0,1}(destination\s+${PORT_OPERATOR_DEST}\s+((${PORT_DST_RANGE_START}\s+${PORT_DST_RANGE_END})|${PORT_DST})){0,1}\s*$$ -> Next.Record
+  ^\s+service\-object\s+object\s+${NESTED_OBJECT}\s*$$ -> Next.Record
+  ^\s+protocol-object\s+${PROTOCOL}\s*$$ -> Next.Record
+  ^\s+icmp\-object\s+${ICMP_TYPE}\s*$$ -> Next.Record
+  ^.* -> Error "No match found"
