@@ -14,7 +14,7 @@ Value PORT_RANGE_END (\S+)
 Value PORT (\S+)
 Value PORT_OPERATOR (eq|gt|lt|range|neq)
 Value PORT_OPERATOR_SRC (eq|gt|lt|range|neq)
-Value PORT_OPERATOR_DEST (eq|gt|lt|range|neq)
+Value PORT_OPERATOR_DST (eq|gt|lt|range|neq)
 Value IP1 (\d+\.\d+\.\d+\.\d+)
 Value IP2 (\d+\.\d+\.\d+\.\d+)
 Value NESTED_GROUP (\S+)
@@ -36,8 +36,8 @@ Start
   ^\s+group\-object\s+${NESTED_GROUP}\s*$$ -> Next.Record
   ^\s+port\-object\s+${PORT_OPERATOR}\s+(${PORT}\s*$$|${PORT_RANGE_START}\s+${PORT_RANGE_END}\s*$$) -> Next.Record
   ^\s+service-object\s+object(${NESTED_OBJECT}\s*$$) -> Next.Record
-  ^\s+service\s+${SERVICE_TYPE}\s+(${ICMP_TYPE}(\s+${ICMP_CODE}){0,1}\s*){0,1}(source\s+${PORT_OPERATOR_SRC}\s+((${PORT_SRC_RANGE_START}\s+${PORT_SRC_RANGE_END})|${PORT_SRC})){0,1}(destination\s+${PORT_OPERATOR_DEST}\s+((${PORT_DST_RANGE_START}\s+${PORT_DST_RANGE_END})|${PORT_DST})){0,1}\s*$$ -> Next.Record
-  ^\s+service\-object\s+${SERVICE_TYPE}\s*(${ICMP_TYPE}(\s+${ICMP_CODE}){0,1}\s*){0,1}(source\s+${PORT_OPERATOR_SRC}\s+((${PORT_SRC_RANGE_START}\s+${PORT_SRC_RANGE_END})|${PORT_SRC})){0,1}(destination\s+${PORT_OPERATOR_DEST}\s+((${PORT_DST_RANGE_START}\s+${PORT_DST_RANGE_END})|${PORT_DST})){0,1}\s*$$ -> Next.Record
+  ^\s+service\s+${SERVICE_TYPE}\s+(${ICMP_TYPE}(\s+${ICMP_CODE}){0,1}\s*){0,1}(source\s+${PORT_OPERATOR_SRC}\s+((${PORT_SRC_RANGE_START}\s+${PORT_SRC_RANGE_END})|${PORT_SRC})){0,1}(destination\s+${PORT_OPERATOR_DST}\s+((${PORT_DST_RANGE_START}\s+${PORT_DST_RANGE_END})|${PORT_DST})){0,1}\s*$$ -> Next.Record
+  ^\s+service\-object\s+${SERVICE_TYPE}\s*(${ICMP_TYPE}(\s+${ICMP_CODE}){0,1}\s*){0,1}(source\s+${PORT_OPERATOR_SRC}\s+((${PORT_SRC_RANGE_START}\s+${PORT_SRC_RANGE_END})|${PORT_SRC})){0,1}(destination\s+${PORT_OPERATOR_DST}\s+((${PORT_DST_RANGE_START}\s+${PORT_DST_RANGE_END})|${PORT_DST})){0,1}\s*$$ -> Next.Record
   ^\s+service\-object\s+object\s+${NESTED_OBJECT}\s*$$ -> Next.Record
   ^\s+protocol-object\s+${PROTOCOL}\s*$$ -> Next.Record
   ^\s+icmp\-object\s+${ICMP_TYPE}\s*$$ -> Next.Record
