@@ -27,6 +27,7 @@ Value PROTOCOL (\s+[0-5]{1,2}\s*$|\s+[0-2][0-5]{1,2}\s*$|\S+\s*$)
 Value ICMP_CODE (\s+[0-5]{1,2}\s*$|\s+[0-2][0-5]{1,2}\s*$)
 
 Start
+  ^$$ -> Next.NoRecord
   ^\S+.* -> Continue.Clearall
   ^object\s+${OBJ_TYPE}\s+${NAME}\s*$$ -> Next.NoRecord
   ^object\-${GROUP}\s+${OBJ_TYPE}\s+${NAME}\s*(${OBJECT_SERVICE_TYPE}){0,1}\s*$$ -> Next.NoRecord

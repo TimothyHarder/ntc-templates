@@ -78,6 +78,7 @@ Value DST_OBJ_PORT (\S+)
 Value ENTRY_PROTOCOL_OBJ_GROUP (\S+)
 
 Start
+  ^$$ -> Next.NoRecord
   ^access\-list\s+${ACL_NAME};\s+${ACL_TOT_ELEM}\s+elements;\s+name\s+hash:\s+${ACL_NAME_HASH}\s* -> Next.NoRecord
   ^access-list\s+${ACL_NAME}\s+remark\s+${REMARK}\s*$$ -> Next.NoRecord
   ^access\-list\s+${ACL_NAME}\s+${TYPE}\s+${ACTION}\s+(object\-group\s+${SVC_OBJECT_GRP}|object\s+${SVC_OBJECT}|${PROTOCOL})\s+(interface\s+${SRC_INTFC}|object\-group\s+${SRC_OBJECT_GRP}|object\s+${SRC_OBJECT}|host\s+${SRC_HOST}|${SRC_NETWORK}\s+${SRC_MASK}|${SRC_ANY})\s+(interface\s+${DST_INTFC}|object\-group\s+${DST_OBJECT_GRP}|object\s+${DST_OBJECT}|host\s+${DST_HOST}|${DST_NETWORK}\s+${DST_MASK}|${DST_ANY})\s+((eq\s+${DST_PORT}|object\-group\s+${DST_PORT_GRP}|object\s+${DST_PORT_OBJECT})\s+){0,1}(${ENTRY_ICMP_TYPE}(\s+${ENTRY_ICMP_CODE}){0,1}\s+){0,1}((log\s+${LOG_LEVEL}\s+interval\s+${LOG_INTERVAL})\s+){0,1}(${STATE}\s+){0,1}\(hitcnt=${HIT_COUNT}\)\s+(\(inactive\)\s+){0,1}${LINE_HASH}\s* -> Record
